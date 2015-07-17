@@ -1,0 +1,12 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Configuration settings for confgen",
+    "type": "object",
+    "properties": {
+        "templates": {
+            "title": "The path to the directory containing all templates",
+            "type": "string"
+        }
+    },
+    "required": ["templates"]
+}

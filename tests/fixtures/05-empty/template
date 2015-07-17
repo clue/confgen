@@ -1,0 +1,4 @@
+---
+description: Empty template contents would not write a file
+target: empty
+---

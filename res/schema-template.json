@@ -1,0 +1,27 @@
+{
+    "$schema": "http://json-schema.org/draft-04/schema#",
+    "title": "Schema for template meta data (aka front matter)",
+    "type": "object",
+    "properties": {
+        "target": {
+            "title": "Target path to write the configuration file to",
+            "type": "string"
+        },
+        "chmod": {
+            "title": "File mode in decimal notation (common values are 644, 755, 700 etc.)",
+            "type": "number",
+            "min": 0,
+            "max": 777
+        },
+        "reload": {
+            "title": "A command string to execute after writing the configuration file",
+            "type": "string"
+        },
+        "description": {
+            "title": "An optional descriptive text for template authors"
+            "type": "string"
+        }
+    },
+    "required": [ "target" ],
+    "additionalProperties": true
+}

@@ -1,0 +1,5 @@
+---
+description: fails because target is not writable
+target: /dev/null
+---
+value = 123;

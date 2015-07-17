@@ -1,0 +1,5 @@
+---
+description: fails because its template contents contains invalid twig syntax
+target: whatever
+---
+{{ invalid

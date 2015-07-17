@@ -1,0 +1,11 @@
+---
+target: output
+reload: touch reloaded
+---
+# just a sample
+timeout = {{ data.timeout }};
+
+[all]
+{% for value in data.values %}
+add {{ value }};
+{% endfor %}
