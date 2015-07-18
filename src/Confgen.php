@@ -33,11 +33,6 @@ class Confgen
             $document = $this->extractFrontMatter($template);
             $meta = $document->getConfig();
 
-            // assert all required keys are present
-            if (!isset($meta['target'])) {
-                throw new \LogicException('Missing "target" definition for template "' . $template . '"');
-            }
-
             // create resulting configuration file by processing template
             $contents = $this->processTemplateContents($document->getContent(), array(
                 'data' => $data,
@@ -47,7 +42,8 @@ class Confgen
             // chmod is either unset or convert decimal to octal notation
             $meta['chmod'] = isset($meta['chmod']) ? decoct($meta['chmod']) : null;
 
-            $target = $this->filePath($meta['target'], $template);
+            // target file name can either be given or defaults to template name without ".twig" extension
+            $target = isset($meta['target']) ? $meta['target'] : basename($template, '.twig');
 
             // write resulting configuration to target path and apply
             if (!$this->fileContains($target, $contents)) {
