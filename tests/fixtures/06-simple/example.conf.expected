@@ -1,0 +1,6 @@
+# just a sample
+timeout = 20;
+
+[all]
+add 10;
+add 12;
