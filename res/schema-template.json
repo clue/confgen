@@ -18,7 +18,7 @@
             "type": "string"
         },
         "description": {
-            "title": "An optional descriptive text for template authors"
+            "title": "An optional descriptive text for template authors",
             "type": "string"
         }
     },
