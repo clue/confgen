@@ -10,10 +10,22 @@ generate structured (configuration) files on the fly.
 
 Each (configuration) template file is broken into two parts:
 
-* The leading YAML front matter (or *variables* or *meta data*)
+* The optional, leading YAML front matter (or *meta-data* variables)
 * And the actual Twig template contents
 
-Each section starts with a three-hyphen divider (`---`), so that a full file would
+In its most simple form, a template without the optional YAML front matter would
+look something like this:
+
+```
+timeout = {{ data.timeout }}
+{% for interface in data.interfaces %}
+auto {{ interface.name }}
+    address {{ interface.address }}
+{% endfor %}
+```
+
+If you also want to include *meta-data* variables, then
+each section starts with a three-hyphen divider (`---`), so that a full file would
 look something like this:
 
 ```
@@ -30,7 +42,7 @@ auto {{ interface.name }}
 
 ### Meta variables
 
-The template files start with the meta-data in the form of a YAML front matter.
+The template files can optionally start with the meta-data in the form of a YAML front matter.
 This syntax is quite simple and is pretty common for template processors and
 static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
 
@@ -52,6 +64,7 @@ Can contain any *Twig template*.
 The input variables will be accessible under the `data` key.
 
 The meta variables will be accessible under the `meta` key.
+If no *meta-data* variables are present, then this key defaults to an empty array.
 
 ## Install
 

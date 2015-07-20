@@ -72,6 +72,17 @@ class ConfgenTest extends TestCase
         $this->assertFileNotExists('empty');
     }
 
+    public function test06Simple()
+    {
+        chdir(__DIR__ . '/fixtures/06-simple');
+
+        $this->confgen->processTemplate('example.conf.twig', $this->loadJson('data.json'));
+
+        // output file successfully generated
+        $this->assertFileEquals('example.conf', 'example.conf.expected');
+        unlink('example.conf');
+    }
+
     private function loadJson($path)
     {
         return json_decode(file_get_contents($path));
