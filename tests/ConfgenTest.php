@@ -52,14 +52,15 @@ class ConfgenTest extends TestCase
         $this->confgen->processTemplate('template', array());
     }
 
-    /**
-     * @expectedException LogicException
-     */
     public function test04NoTarget()
     {
         chdir(__DIR__ . '/fixtures/04-no-target');
 
-        $this->confgen->processTemplate('template', array());
+        $this->confgen->processTemplate('example.conf.twig', array());
+
+        // reload command successfully executed
+        $this->assertFileExists('example.conf');
+        unlink('example.conf');
     }
 
     public function test05Empty()

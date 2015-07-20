@@ -36,7 +36,7 @@ static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
 
 Documented variables:
 
-* `target` (required!), target path to write the resulting file to
+* `target` target path to write the resulting file to
 * `chmod` file mode of the resulting file
 * `reload` command to execute after writing the resulting file
 * `description` human readable description
