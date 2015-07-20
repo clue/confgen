@@ -1,6 +1,6 @@
 <?php
 
-use Datus\Configure\ConfigurateWebRouterApplication;
+use Clue\Confgen\Factory;
 use Clue\Confgen\Confgen;
 
 class ConfgenTest extends TestCase
@@ -10,11 +10,8 @@ class ConfgenTest extends TestCase
 
     public function setUp()
     {
-        $loader = new Twig_Loader_String();
-        $twig = new Twig_Environment($loader, array(
-            'strict_variables' => true
-        ));
-        $this->confgen = new Confgen($twig);
+        $this->factory = new Factory();
+        $this->confgen = $this->factory->createConfgen();
     }
 
     public function test01SimpleConfigGenerate()
