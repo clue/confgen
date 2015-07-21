@@ -14,11 +14,20 @@ class ConfgenTest extends TestCase
         $this->confgen = $this->factory->createConfgen();
     }
 
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionCode 66
+     */
+    public function testProcessTemplateMissingFails()
+    {
+        $this->confgen->processTemplate('/dev/does-not-exist', null);
+    }
+
     public function test01SimpleConfigGenerate()
     {
         chdir(__DIR__ . '/fixtures/01-simple-config');
 
-        $this->confgen->processTemplate('template.twig', $this->loadJson('data.json'));
+        $this->confgen->processTemplate('template.twig', 'data.json');
 
         // output file successfully generated
         $this->assertFileEquals('output.expected', 'output');
@@ -31,12 +40,34 @@ class ConfgenTest extends TestCase
 
     /**
      * @expectedException RuntimeException
+     * @expectedExceptionCode 66
+     */
+    public function testProcessTemplateDataMissingFails()
+    {
+        chdir(__DIR__ . '/fixtures/01-simple-config');
+
+        $this->confgen->processTemplate('template.twig', 'does-not-exist.json');
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionCode 65
+     */
+    public function testProcessTemplateDataNotJsonFails()
+    {
+        chdir(__DIR__ . '/fixtures/01-simple-config');
+
+        $this->confgen->processTemplate('template.twig', 'template.twig');
+    }
+
+    /**
+     * @expectedException RuntimeException
      */
     public function test02InvalidTarget()
     {
         chdir(__DIR__ . '/fixtures/02-invalid-target');
 
-        $this->confgen->processTemplate('template', array());
+        $this->confgen->processTemplate('template', null);
     }
 
     /**
@@ -46,14 +77,14 @@ class ConfgenTest extends TestCase
     {
         chdir(__DIR__ . '/fixtures/03-invalid-template');
 
-        $this->confgen->processTemplate('template', array());
+        $this->confgen->processTemplate('template', null);
     }
 
     public function test04NoTarget()
     {
         chdir(__DIR__ . '/fixtures/04-no-target');
 
-        $this->confgen->processTemplate('example.conf.twig', array());
+        $this->confgen->processTemplate('example.conf.twig', null);
 
         // reload command successfully executed
         $this->assertFileExists('example.conf');
@@ -64,7 +95,7 @@ class ConfgenTest extends TestCase
     {
         chdir(__DIR__ . '/fixtures/05-empty');
 
-        $this->confgen->processTemplate('template', array());
+        $this->confgen->processTemplate('template', null);
 
         $this->assertFileNotExists('empty');
     }
@@ -73,15 +104,10 @@ class ConfgenTest extends TestCase
     {
         chdir(__DIR__ . '/fixtures/06-simple');
 
-        $this->confgen->processTemplate('example.conf.twig', $this->loadJson('data.json'));
+        $this->confgen->processTemplate('example.conf.twig', 'data.json');
 
         // output file successfully generated
         $this->assertFileEquals('example.conf', 'example.conf.expected');
         unlink('example.conf');
-    }
-
-    private function loadJson($path)
-    {
-        return json_decode(file_get_contents($path));
     }
 }
