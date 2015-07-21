@@ -121,4 +121,44 @@ class ConfgenTest extends TestCase
 
         $this->confgen->processTemplate('template', null);
     }
+
+    public function test08DefinitionSimple()
+    {
+        chdir(__DIR__ . '/fixtures/08-definition-simple');
+
+        $this->confgen->processDefinition('confgen.json', null);
+
+        // output file successfully written
+        $this->assertFileExists('example.conf');
+        unlink('example.conf');
+    }
+
+    public function test09DefinitionEmpty()
+    {
+        chdir(__DIR__ . '/fixtures/09-definition-empty');
+
+        $this->confgen->processDefinition('confgen.json', null);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionCode 65
+     */
+    public function test10DefinitionInvalidNoTemplates()
+    {
+        chdir(__DIR__ . '/fixtures/10-definition-invalid-no-templates');
+
+        $this->confgen->processDefinition('confgen.json', null);
+    }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionCode 65
+     */
+    public function test11DefinitionInvalidNoJson()
+    {
+        chdir(__DIR__ . '/fixtures/11-definition-invalid-no-json');
+
+        $this->confgen->processDefinition('invalid.json', null);
+    }
 }

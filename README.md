@@ -54,6 +54,7 @@ Documented variables:
 * `description` human readable description
 
 You can also pass arbitrary custom meta-data.
+See [meta-data schema](res/schema-template.json) for more details.
 
 The meta variables will be accessible under the `meta` key in the Twig template.
 
@@ -65,6 +66,21 @@ The input variables will be accessible under the `data` key.
 
 The meta variables will be accessible under the `meta` key.
 If no *meta-data* variables are present, then this key defaults to an empty array.
+
+## Configuration
+
+You can either parse/process individual template files or use a configuration
+definition that allows you to process a number of files in one go.
+
+In its most simple form, a JSON configuration structure looks like this:
+
+```json
+{
+    "templates": "example/*.twig"
+}
+```
+
+See [configuration schema](res/schema-confgen.json) for more details.
 
 ## Install
 

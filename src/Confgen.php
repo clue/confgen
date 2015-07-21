@@ -12,6 +12,7 @@ class Confgen
     private $twig;
     private $validator;
     private $schemaMeta;
+    private $schemaDefinition;
 
     public function __construct(Twig_Environment $twig, Validator $validator)
     {
@@ -19,6 +20,7 @@ class Confgen
         $this->validator = $validator;
 
         $this->schemaMeta = $this->fileData(__DIR__ . '/../res/schema-template.json', false);
+        $this->schemaDefinition = $this->fileData(__DIR__ . '/../res/schema-confgen.json', false);
     }
 
     public function processTemplate($templateFile, $dataFile)
@@ -32,8 +34,19 @@ class Confgen
         );
     }
 
+    public function processDefinition($definitionFile, $dataFile)
+    {
+        return $this->processDefinitionData(
+            $this->fileData($definitionFile),
+            $dataFile === null ? null : $this->fileData($dataFile)
+        );
+    }
+
     private function processDefinitionData(array $definition, $data)
     {
+        // validate schema definition
+        $this->validate($definition, $this->schemaDefinition);
+
         $commands = array();
 
         $templates = glob($definition['templates']);
