@@ -15,15 +15,18 @@ class Confgen
         $this->twig = $twig;
     }
 
-    public function processTemplate($template, $data)
+    public function processTemplate($templateFile, $dataFile)
     {
-        return $this->processDefinition(
-            array('templates' => $template),
-            $data
+        // assert file does actually exist
+        $this->fileContents($templateFile);
+
+        return $this->processDefinitionData(
+            array('templates' => $templateFile),
+            $dataFile === null ? null : $this->fileData($dataFile)
         );
     }
 
-    public function processDefinition(array $definition, $data)
+    private function processDefinitionData(array $definition, $data)
     {
         $commands = array();
 
@@ -74,20 +77,21 @@ class Confgen
         return FrontMatter::parse($contents);
     }
 
-    private function filePath($path, $relativeTo)
+    private function fileData($path)
     {
-        if (substr($path, 0, 1) === '/') {
-            return $path;
+        $data = json_decode($this->fileContents($path), true);
+        if (json_last_error() !== JSON_ERROR_NONE) {
+            throw new \RuntimeException('File "' . $path . '" contains invalid JSON', 65 /* EX_DATAERR */);
         }
-        return dirname($relativeTo) . '/' . $path;
+        return $data;
     }
 
     private function fileContents($file)
     {
-        $ret = file_get_contents($file);
+        $ret = @file_get_contents($file);
 
         if ($ret === false) {
-            throw new \RuntimeException('Unable to read file "' . $file . '"');
+            throw new \RuntimeException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */);
         }
 
         return $ret;
