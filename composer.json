@@ -15,7 +15,8 @@
     },
     "require": {
         "php": ">=5.3",
-        "twig/twig": "~1.14.0",
-        "kzykhys/yaml-front-matter": "~1.0"
+        "twig/twig": "~1.14",
+        "kzykhys/yaml-front-matter": "~1.0",
+        "justinrainbow/json-schema": "~1.4"
     }
 }
