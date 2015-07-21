@@ -4,6 +4,7 @@ namespace Clue\Confgen;
 
 use Twig_Loader_String;
 use Twig_Environment;
+use JsonSchema\Validator;
 
 class Factory
 {
@@ -18,6 +19,8 @@ class Factory
         $twig = new Twig_Environment($loader);
         $twig->enableStrictVariables();
 
-        return new Confgen($twig);
+        $validator = new Validator();
+
+        return new Confgen($twig, $validator);
     }
 }

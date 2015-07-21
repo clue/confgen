@@ -1,0 +1,10 @@
+---
+description: fails because target must be a string
+target:
+- must
+- not
+- contain
+- a
+- list
+---
+value = 123;
