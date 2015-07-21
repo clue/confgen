@@ -110,4 +110,15 @@ class ConfgenTest extends TestCase
         $this->assertFileEquals('example.conf', 'example.conf.expected');
         unlink('example.conf');
     }
+
+    /**
+     * @expectedException RuntimeException
+     * @expectedExceptionCode 65
+     */
+    public function test07InvalidMeta()
+    {
+        chdir(__DIR__ . '/fixtures/07-invalid-meta');
+
+        $this->confgen->processTemplate('template', null);
+    }
 }

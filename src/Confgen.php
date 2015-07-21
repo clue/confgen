@@ -5,14 +5,20 @@ namespace Clue\Confgen;
 use Twig_Environment;
 use RuntimeException;
 use KzykHys\FrontMatter\FrontMatter;
+use JsonSchema\Validator;
 
 class Confgen
 {
     private $twig;
+    private $validator;
+    private $schemaMeta;
 
-    public function __construct(Twig_Environment $twig)
+    public function __construct(Twig_Environment $twig, Validator $validator)
     {
         $this->twig = $twig;
+        $this->validator = $validator;
+
+        $this->schemaMeta = $this->fileData(__DIR__ . '/../res/schema-template.json', false);
     }
 
     public function processTemplate($templateFile, $dataFile)
@@ -35,6 +41,9 @@ class Confgen
         foreach ($templates as $template) {
             $document = $this->extractFrontMatter($template);
             $meta = $document->getConfig();
+
+            // validate meta data variables
+            $this->validate($meta, $this->schemaMeta);
 
             // create resulting configuration file by processing template
             $contents = $this->processTemplateContents($document->getContent(), array(
@@ -77,9 +86,9 @@ class Confgen
         return FrontMatter::parse($contents);
     }
 
-    private function fileData($path)
+    private function fileData($path, $assoc = true)
     {
-        $data = json_decode($this->fileContents($path), true);
+        $data = json_decode($this->fileContents($path), $assoc);
         if (json_last_error() !== JSON_ERROR_NONE) {
             throw new \RuntimeException('File "' . $path . '" contains invalid JSON', 65 /* EX_DATAERR */);
         }
@@ -152,6 +161,20 @@ class Confgen
         exec($command, $ret, $code);
         if ($code !== 0) {
             throw new \RuntimeException('Unable to execute "' . $command . '"');
+        }
+    }
+
+    private function validate($data, $schema)
+    {
+        $this->validator->reset();
+        $this->validator->check((object)$data, $schema);
+
+        if (!$this->validator->isValid()) {
+            $message = 'Unable to validate template meta data';
+            foreach ($this->validator->getErrors() as $error) {
+                $message .= PHP_EOL . $error['message'];
+            }
+            throw new \RuntimeException($message, 65 /*EX_DATAERR */);
         }
     }
 }
