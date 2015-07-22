@@ -1,0 +1,57 @@
+#!/usr/bin/env php
+<?php
+require __DIR__ . '/../vendor/autoload.php';
+
+use Clue\Confgen\Factory;
+
+$args = getopt('t:c:d:h');
+
+if (isset($args['h']) || !isset($argv[1])) {
+    showUsage();
+}
+
+// requires either -t or -c, but not both
+if ((!isset($args['t']) && !isset($args['c'])) || isset($args['t'], $argcs['c'])) {
+    error('Requires argument for either template ("-t") or configuration ("-c").', 64 /* EX_USAGE */);
+}
+
+// JSON input data is optional and defaults to null
+$dataFile = isset($args['d']) ? $args['d'] : null;
+
+$factory = new Factory();
+$confgen = $factory->createConfgen();
+
+try {
+    if (isset($args['c'])) {
+        $confgen->processDefinition($args['c'], $dataFile);
+    } else {
+        $confgen->processTemplate($args['t'], $dataFile);
+    }
+} catch (Twig_Error $e) {
+    error('Template error: ' . $e->getMessage(), 1);
+} catch (Exception $e) {
+    error('Processing failed: ' . $e->getMessage(), $e->getCode());
+}
+
+function error($msg, $code = 0)
+{
+    fwrite(STDERR, 'Error: ' . $msg . PHP_EOL);
+    exit($code ? $code : 1);
+}
+
+function showUsage()
+{
+    echo <<<EOT
+Configuration file generator (confgen)
+Usage: confgen -t template.twig [-d data.json]
+   Or: confgen -c confgen.json [-d data.json]
+
+Options:
+    -t    Path to Twig template file
+    -c    Path to confgen JSON configuration definition
+    -d    Path to optional JSON input data file
+    -h    Show this help
+
+EOT;
+    exit(64 /* EX_USAGE */);
+}

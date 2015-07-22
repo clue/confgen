@@ -13,6 +13,7 @@
     "autoload": {
         "psr-4": { "Clue\\Confgen\\": "src/" }
     },
+    "bin": [ "bin/confgen" ],
     "require": {
         "php": ">=5.3",
         "twig/twig": "~1.14",
