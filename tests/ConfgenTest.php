@@ -70,14 +70,18 @@ class ConfgenTest extends TestCase
         $this->confgen->processTemplate('template', null);
     }
 
-    /**
-     * @expectedException Twig_Error_Syntax
-     */
     public function test03InvalidTemplate()
     {
         chdir(__DIR__ . '/fixtures/03-invalid-template');
 
-        $this->confgen->processTemplate('template', null);
+        try {
+            $this->confgen->processTemplate('template', null);
+            $this->fail('Should not be reached');
+        } catch (Twig_Error_Syntax $e) {
+            $this->assertTrue(true);
+
+            $this->assertEquals('template', $e->getTemplateFile());
+        }
     }
 
     public function test04NoTarget()
