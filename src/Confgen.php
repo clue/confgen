@@ -3,6 +3,7 @@
 namespace Clue\Confgen;
 
 use Twig_Environment;
+use Twig_Loader_Array;
 use RuntimeException;
 use KzykHys\FrontMatter\FrontMatter;
 use JsonSchema\Validator;
@@ -58,8 +59,12 @@ class Confgen
             // validate meta data variables
             $this->validate($meta, $this->schemaMeta);
 
+            // use a new dummy loader whose sole responsibilty is mapping template name to contents
+            // this allows us to reference the template by name (and receive according error messages)
+            $this->twig->setLoader(new Twig_Loader_Array(array($template => $document->getContent())));
+
             // create resulting configuration file by processing template
-            $contents = $this->processTemplateContents($document->getContent(), array(
+            $contents = $this->processTemplateContents($template, array(
                 'data' => $data,
                 'meta' => $meta
             ));
