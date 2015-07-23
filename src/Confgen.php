@@ -26,31 +26,30 @@ class Confgen
 
     public function processTemplate($templateFile, $dataFile)
     {
-        // assert file does actually exist
-        $this->fileContents($templateFile);
-
-        return $this->processDefinitionData(
-            array('templates' => $templateFile),
+        return $this->processTemplatesData(
+            array($templateFile),
             $dataFile === null ? null : $this->fileData($dataFile)
         );
     }
 
     public function processDefinition($definitionFile, $dataFile)
     {
-        return $this->processDefinitionData(
-            $this->fileData($definitionFile),
+        $definition = $this->fileData($definitionFile);
+
+        // validate schema definition
+        $this->validate($definition, $this->schemaDefinition);
+
+        $templates = glob($definition['templates']);
+
+        return $this->processTemplatesData(
+            $templates,
             $dataFile === null ? null : $this->fileData($dataFile)
         );
     }
 
-    private function processDefinitionData(array $definition, $data)
+    private function processTemplatesData(array $templates, $data)
     {
-        // validate schema definition
-        $this->validate($definition, $this->schemaDefinition);
-
         $commands = array();
-
-        $templates = glob($definition['templates']);
 
         foreach ($templates as $template) {
             $document = $this->extractFrontMatter($template);
