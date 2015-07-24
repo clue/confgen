@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.4.0 (2015-07-24)
+
+*   Feature: Add confgen bin
+    ([#13](https://github.com/clue/php-confgen/pull/13))
+
+*   Feature: Optionally pass custom `Twig_Environment` and `JsonSchema\Validator` to `Factory`
+    ([#17](https://github.com/clue/php-confgen/pull/17))
+
+*   Feature: Use correct template name for template syntax Exceptions
+    ([#14](https://github.com/clue/php-confgen/pull/14))
+
+*   Improved documentation
+
 ## 0.3.0 (2015-07-21)
 
 *   Feature: Add configuration definition

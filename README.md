@@ -4,8 +4,6 @@ Configuration file generator (confgen) –
 an easy way to take a *Twig template* and an arbitrary input data structure to
 generate structured (configuration) files on the fly. 
 
-> Note: This project is in beta stage! Feel free to report any issues you encounter.
-
 ## Input data
 
 This project is all about transforming *your input data* structure.
@@ -262,7 +260,7 @@ The recommended way to install this library is [through composer](http://getcomp
 ```JSON
 {
     "require": {
-        "clue/confgen": "~0.3.0"
+        "clue/confgen": "~0.4.0"
     }
 }
 ```
