@@ -182,6 +182,58 @@ invoke it like this:
 $ ./vendor/bin/confgen
 ```
 
+## Lib Usage
+
+See the above section for [bin usage](#bin-usage) which is usually easier to get started.
+
+If you want to integrate this into another tool, you may also use this project as a lib(rary).
+
+### Factory
+
+The `Factory` class is a helper class that can be used to *easily* create
+a new `Confgen` instance.
+
+```php
+$factory = new Factory();
+```
+
+#### createConfgen()
+
+The `createConfgen()` method can be used to create a new `Confgen` instance.
+Usually, there should be no need to call this more than once.
+
+```php
+$confgen = $factory->createConfgen();
+```
+
+### Confgen
+
+The `Confgen` class is responsible for processing the templates
+(*this is where the magic happens*).
+
+#### processTemplate
+
+The `processTemplate($templateFile, $dataFile)` method can be used to
+generate a output (configuration) file from the given [template file](#templates).
+
+```php
+$confgen->processTemplate('template.twig', 'data.json');
+```
+
+See also [templates section](#templates) above for more details on the 
+The [input data](#input-data).
+
+#### processDefinition
+
+The `processDefinition($definitionFile, $dataFile)` method can be used to
+generate any number of output (configuration) files from the given [configuration file](#configuration).
+
+```php
+$confgen->processDefinition('confgen.json', 'data.json');
+```
+
+See also [configuration section](#configuration) above for more details.
+
 ## Install
 
 The recommended way to install this library is [through composer](http://getcomposer.org). [New to composer?](http://getcomposer.org/doc/00-intro.md)
