@@ -6,6 +6,56 @@ generate structured (configuration) files on the fly.
 
 > Note: This project is in beta stage! Feel free to report any issues you encounter.
 
+## Input data
+
+This project is all about transforming *your input data* structure.
+
+As such, it makes no assumptions as to what kind of input data you're
+dealing with, as long as it can be expressed in a simple JSON structure.
+This project focuses on JSON input data for a few key reasons:
+
+* Arbitrary data structure
+  * Can contain pretty much any data structure
+  * Simple, sane, strict data types
+  * Flat or deeply nested structures
+  * Schemaless by default – but offers options for using schema
+* Ease of consuming (simple to read)
+  * For both humans and machines alike
+  * Easy to reason about
+  * Maps well into dotted notation used in template files
+* Ease of producing (simple to write)
+  * Simple to convert into from many other common formats, such as YAML, XML, CSV, INI etc.
+  * Very easy to write in PHP and many other languages
+* Widespread use
+
+Chances are, your input data *might* already be in a JSON file.
+If it's not, then it's very easy to either convert with one of the many existing tools
+or libraries or use some code similar to the following example:
+
+```php
+// $data = loadFromYaml('input.yml');
+// $data = parseFromIni('input.ini');
+$data = fetchFromDatabase();
+file_put_contents('data.json', json_encode($data));
+```
+
+The structure of your input data file is entirely left up to you.
+This library allows you to use any arbitrary input data structure.
+For the following examples, this document assumes the following
+(totally arbitrary) input data structure:
+
+```json
+{
+    "timeout": 120,
+    "interfaces": [
+        {
+            "name": "eth0",
+            "address": "192.168.1.1"
+        }
+    ]
+}
+```
+
 ## Templates
 
 Each (configuration) template file is broken into two parts:
@@ -34,11 +84,14 @@ target: /etc/network/interfaces
 chmod: 644
 reload: /etc/init.d/networking reload
 ---
+timeout = {{ data.timeout }}
 {% for interface in data.interfaces %}
 auto {{ interface.name }}
     address {{ interface.address }}
 {% endfor %}
 ```
+
+The individual sections are described in more detail in the following sections.
 
 ### Meta variables
 
