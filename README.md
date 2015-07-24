@@ -187,6 +187,7 @@ $ ./vendor/bin/confgen
 See the above section for [bin usage](#bin-usage) which is usually easier to get started.
 
 If you want to integrate this into another tool, you may also use this project as a lib(rary).
+The same also applies if you want to use custom twig extensions, functions or filters.
 
 ### Factory
 
@@ -195,6 +196,26 @@ a new `Confgen` instance.
 
 ```php
 $factory = new Factory();
+```
+
+#### Twig_Environment
+
+Internally, the `Factory` will create a `Twig_Environment` instance that
+will be used to process the template files.
+
+You may want to explicitly pass an instance if you want to use any of the following:
+
+* custom twig extensions
+* custom twig functions
+* custom twig filters
+
+```php
+$twig = new Twig_Environment();
+$twig->addFilter(new Twig_SimpleFilter('backwards', function ($value) {
+    return strrev($value);
+});
+
+$factory = new Factory($twig);
 ```
 
 #### createConfgen()
