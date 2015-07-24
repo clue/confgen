@@ -93,6 +93,25 @@ auto {{ interface.name }}
 
 The individual sections are described in more detail in the following sections.
 
+You can generate the output (configuration) file by [invoking confgen](#bin-usage) like this:
+
+```bash
+$ confgen -t template.twig -d data.json
+```
+
+If the [template meta-data](#meta-variables) contains a `target` key,
+it will write the resulting file to this location.
+Otherwise it will write to the template file name without extension (i.e. `template`).
+
+With the above example template and input data,
+the resulting output (configuration) file will look something like this:
+
+```
+timeout = 120
+auto eth0
+    address 192.168.1.1
+```
+
 ### Meta variables
 
 The template files can optionally start with the meta-data in the form of a YAML front matter.
@@ -134,6 +153,34 @@ In its most simple form, a JSON configuration structure looks like this:
 ```
 
 See [configuration schema](res/schema-confgen.json) for more details.
+
+You can generate the output (configuration) files by [invoking confgen](#bin-usage) like this:
+
+```bash
+$ confgen -c confgen.json -d data.json
+```
+
+This works similar to invoking with individual [template files](#templates).
+
+## Bin Usage
+
+Once [installed](#install), you can use this tool as a bin(ary) executable.
+
+Some usage examples are given above.
+
+If you want to see the usage help,
+simply invoke its help by calling like this:
+
+```bash
+$ confgen 
+```
+
+If you have installed this via `$ composer require`, then you may have to
+invoke it like this:
+
+```bash
+$ ./vendor/bin/confgen
+```
 
 ## Install
 
