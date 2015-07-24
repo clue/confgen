@@ -165,4 +165,31 @@ class ConfgenTest extends TestCase
 
         $this->confgen->processDefinition('invalid.json', null);
     }
+
+    /**
+     * @expectedException Twig_Error_Syntax
+     */
+    public function test12CustomFilterFailsWhenNotRegistered()
+    {
+        chdir(__DIR__ . '/fixtures/12-custom-filter');
+
+        $this->confgen->processTemplate('filter.twig', null);
+    }
+
+    public function test12CustomFilterWorksWhenRegistered()
+    {
+        chdir(__DIR__ . '/fixtures/12-custom-filter');
+
+        $twig = new Twig_Environment();
+        $twig->addFilter(new Twig_SimpleFilter('test', function ($value) { return 'yes'; }));
+
+        $this->factory = new Factory($twig);
+        $this->confgen = $this->factory->createConfgen();
+
+        $this->confgen->processTemplate('filter.twig', null);
+
+        // output file successfully written
+        $this->assertFileExists('filter');
+        unlink('filter');
+    }
 }
