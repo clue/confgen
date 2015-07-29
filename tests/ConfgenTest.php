@@ -137,6 +137,17 @@ class ConfgenTest extends TestCase
         unlink('example.conf');
     }
 
+    public function test08DefinitionSimpleRelativeGlobPath()
+    {
+        $path = __DIR__ . '/fixtures/08-definition-simple/';
+
+        $this->confgen->processDefinition($path . 'confgen.json', null);
+
+        // output file successfully written to CURRENT(!) directory
+        $this->assertFileExists('example.conf');
+        unlink('example.conf');
+    }
+
     public function test09DefinitionEmpty()
     {
         chdir(__DIR__ . '/fixtures/09-definition-empty');
