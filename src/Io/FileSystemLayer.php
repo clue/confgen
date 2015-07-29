@@ -1,6 +1,6 @@
 <?php
 
-namespace Clue\Confgen;
+namespace Clue\Confgen\Io;
 
 class FileSystemLayer
 {

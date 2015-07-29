@@ -7,6 +7,7 @@ use Twig_Loader_Array;
 use RuntimeException;
 use KzykHys\FrontMatter\FrontMatter;
 use JsonSchema\Validator;
+use Clue\Confgen\Io\FileSystemLayer;
 
 class Confgen
 {

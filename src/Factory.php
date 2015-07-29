@@ -4,6 +4,7 @@ namespace Clue\Confgen;
 
 use Twig_Environment;
 use JsonSchema\Validator;
+use Clue\Confgen\Io\FileSystemLayer;
 
 class Factory
 {
@@ -28,12 +29,12 @@ class Factory
      * Optionally, you can explicitly pass an instance of `JsonSchema\Validator` to
      * this constructor. If nothing is passed, it will initialize sane defaults.
      *
-     * Optionally, you can explicitly pass an instance of `FileSystemLayer` to
+     * Optionally, you can explicitly pass an instance of `Io\FileSystemLayer` to
      * this constructor. If nothing is passed, it will initialize sane defaults.
      *
      * @param Twig_Environment|null $twig      (optional) Twig_Environment to use
      * @param Validator|null        $validator (optional) JsonSchema\Validator to use
-     * @param FileSystemLayer|null  $fs        (optional) FileSystemLayer to use
+     * @param FileSystemLayer|null  $fs        (optional) Io\FileSystemLayer to use
      */
     public function __construct(Twig_Environment $twig = null, Validator $validator = null, FileSystemLayer $fs = null)
     {
