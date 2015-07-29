@@ -119,8 +119,8 @@ static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
 Documented variables:
 
 * `target` target path to write the resulting file to
-* `chmod` file mode of the resulting file
-* `reload` command to execute after writing the resulting file
+* `chmod` file permissions (decimal) for the target file
+* `reload` command to execute after writing the target file
 * `description` human readable description
 
 You can also pass arbitrary custom meta-data.

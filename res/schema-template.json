@@ -8,7 +8,8 @@
             "type": "string"
         },
         "chmod": {
-            "title": "File mode in decimal notation (common values are 644, 755, 700 etc.)",
+            "title": "File permissions to apply to target file (chmod mode)",
+            "description": "Permissions must be given in decimal notation (common values are '644', '755', '700' etc.).\nInternally, they will be converted to their octal representation, which means that decimal '777' will actually apply octal '0777'.",
             "type": "number",
             "min": 0,
             "max": 777
