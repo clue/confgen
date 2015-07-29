@@ -266,7 +266,7 @@ The recommended way to install this library is [through composer](http://getcomp
 ```JSON
 {
     "require": {
-        "clue/confgen": "~0.4.0"
+        "clue/confgen": "~0.5.0"
     }
 }
 ```

@@ -1,5 +1,16 @@
 # Changelog
 
+## 0.5.0 (2015-07-29)
+
+*   BC break / Feature: Path to "templates" is relative to definition – other paths to PWD
+    ([#22](https://github.com/clue/php-confgen/pull/22))
+
+*   Fix: Apply proper file permissions (chmod mode)
+    ([#20](https://github.com/clue/php-confgen/pull/20))
+
+*   Maintenance: Refactor file system related functionality
+    ([#21](https://github.com/clue/php-confgen/pull/21))
+
 ## 0.4.0 (2015-07-24)
 
 *   Feature: Add confgen bin
