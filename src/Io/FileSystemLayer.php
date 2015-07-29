@@ -18,7 +18,7 @@ class FileSystemLayer
     {
         $data = json_decode($this->fileContents($path), $assoc);
         if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('File "' . $path . '" contains invalid JSON', 65 /* EX_DATAERR */);
+            throw new FileSystemException('File "' . $path . '" contains invalid JSON', 65 /* EX_DATAERR */);
         }
         return $data;
     }
@@ -28,7 +28,7 @@ class FileSystemLayer
         $ret = @file_get_contents($file);
 
         if ($ret === false) {
-            throw new \RuntimeException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */);
+            throw new FileSystemException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */);
         }
 
         return $ret;
@@ -50,8 +50,8 @@ class FileSystemLayer
             if (file_exists($file)) {
                 try {
                     $this->unlink($file);
-                } catch (\RuntimeException $e) {
-                    throw new \RuntimeException('Unable to delete config "' . $file . '"', 0, $e);
+                } catch (FileSystemException $e) {
+                    throw new FileSystemException('Unable to delete config "' . $file . '"', 0, $e);
                 }
             }
             return;
@@ -62,7 +62,7 @@ class FileSystemLayer
         // first write contents to temporary file
         $ret = @file_put_contents($temp, $contents);
         if ($ret === false) {
-            throw new \RuntimeException('Unable to write temp file "' . $temp . '"');
+            throw new FileSystemException('Unable to write temp file "' . $temp . '"');
         }
 
         try {
@@ -74,13 +74,13 @@ class FileSystemLayer
             try {
                 // overwrite target file with temporary file
                 $this->rename($temp, $file);
-            } catch (\RuntimeException $e) {
-                throw new \RuntimeException('Unable to replace config "'. $file . '" with "' . $temp . '"', 0, $e);
+            } catch (FileSystemException $e) {
+                throw new FileSystemException('Unable to replace config "'. $file . '" with "' . $temp . '"', 0, $e);
             }
-        } catch (\RuntimeException $e) {
+        } catch (\Exception $e) {
             try {
                 $this->unlink($temp);
-            } catch (\RuntimeException $ignored) {
+            } catch (FileSystemException $ignored) {
                 // explicitly remove temp file, but ignore its return code
             }
 
@@ -92,7 +92,7 @@ class FileSystemLayer
     {
         $ret = unlink($file);
         if ($ret === false) {
-            throw new \RuntimeException('Unable to delete "' . $file . '"');
+            throw new FileSystemException('Unable to delete "' . $file . '"');
         }
     }
 
@@ -100,7 +100,7 @@ class FileSystemLayer
     {
         $ret = @chmod($file, $chmod);
         if ($ret === false) {
-            throw new \RuntimeException('Unable to set file chmod for file "' . $file . '"');
+            throw new FileSystemException('Unable to set file chmod for file "' . $file . '"');
         }
     }
 
@@ -108,7 +108,7 @@ class FileSystemLayer
     {
         $ret = rename($old, $new);
         if ($ret === false) {
-            throw new \RuntimeException('Unable to rename "' . $old . '" to "' . $new . '"');
+            throw new FileSystemException('Unable to rename "' . $old . '" to "' . $new . '"');
         }
     }
 }
