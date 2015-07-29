@@ -11,7 +11,7 @@ class FileSystemLayerTest extends TestCase
         $this->fs = new FileSystemLayer();
     }
 
-    public function testFuntionalReplaceEmpty()
+    public function testFunctionalReplaceEmpty()
     {
         chdir(sys_get_temp_dir());
         $temp = tempnam(getcwd(), 'test');
@@ -23,6 +23,32 @@ class FileSystemLayerTest extends TestCase
 
         $this->fs->fileReplace($temp, '', null);
         $this->assertTrue($this->fs->fileContains($temp, ''));
+    }
+
+    public function testContainsMissing()
+    {
+        $temp = 'does-not-exist';
+
+        $this->assertTrue($this->fs->fileContains($temp, ''));
+    }
+
+    public function testReplaceEmpty()
+    {
+        $temp = 'does-not-exist';
+
+        $this->fs->fileReplace($temp, '', null);
+        $this->assertTrue($this->fs->fileContains($temp, ''));
+        $this->assertFileNotExists($temp);
+    }
+
+    /**
+     * @expectedException Clue\Confgen\Io\FileSystemException
+     */
+    public function testReplaceEmptyNotWritable()
+    {
+        $temp = '/dev/null';
+
+        $this->fs->fileReplace($temp, '', null);
     }
 
     /**

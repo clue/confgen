@@ -47,10 +47,11 @@ class FileSystemLayer
     public function fileReplace($file, $contents, $chmod)
     {
         if ($contents === '') {
-            if (file_exists($file)) {
-                try {
-                    $this->unlink($file);
-                } catch (FileSystemException $e) {
+            try {
+                $this->unlink($file);
+            } catch (FileSystemException $e) {
+                if (file_exists($file)) {
+                    // only throw if file still exists (missing in the first place is valid)
                     throw new FileSystemException('Unable to delete config "' . $file . '"', 0, $e);
                 }
             }
