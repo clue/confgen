@@ -48,9 +48,10 @@ class FileSystemLayer
     {
         if ($contents === '') {
             if (file_exists($file)) {
-                $ret = unlink($file);
-                if ($ret === false) {
-                    throw new \RuntimeException('Unable to delete config "' . $file . '"');
+                try {
+                    $this->unlink($file);
+                } catch (\RuntimeException $e) {
+                    throw new \RuntimeException('Unable to delete config "' . $file . '"', 0, $e);
                 }
             }
             return;
@@ -64,24 +65,50 @@ class FileSystemLayer
             throw new \RuntimeException('Unable to write temp file "' . $temp . '"');
         }
 
-        // apply file mode (chmod) if given
-        if ($chmod !== null) {
-            $ret = @chmod($temp, $chmod);
-            if ($ret === false) {
-                // explicitly remove temp file, but ignore its return code
-                unlink($temp);
-
-                throw new \RuntimeException('Unable to set file chmod for file "' . $temp . '"');
+        try {
+            if ($chmod !== null) {
+                // apply file mode (chmod) to temporary file (if given)
+                $this->chmod($temp, $chmod);
             }
-        }
 
-        $ret = rename($temp, $file);
-        if ($ret === false) {
-            // explicitly remove temp file, but ignore its return code
-            unlink($temp);
+            try {
+                // overwrite target file with temporary file
+                $this->rename($temp, $file);
+            } catch (\RuntimeException $e) {
+                throw new \RuntimeException('Unable to replace config "'. $file . '" with "' . $temp . '"', 0, $e);
+            }
+        } catch (\RuntimeException $e) {
+            try {
+                $this->unlink($temp);
+            } catch (\RuntimeException $ignored) {
+                // explicitly remove temp file, but ignore its return code
+            }
 
-            throw new \RuntimeException('Unable to replace config "' . $file . '" with "' . $temp . '"');
+            throw $e;
         }
     }
 
+    public function unlink($file)
+    {
+        $ret = unlink($file);
+        if ($ret === false) {
+            throw new \RuntimeException('Unable to delete "' . $file . '"');
+        }
+    }
+
+    public function chmod($file, $chmod)
+    {
+        $ret = @chmod($file, $chmod);
+        if ($ret === false) {
+            throw new \RuntimeException('Unable to set file chmod for file "' . $file . '"');
+        }
+    }
+
+    public function rename($old, $new)
+    {
+        $ret = rename($old, $new);
+        if ($ret === false) {
+            throw new \RuntimeException('Unable to rename "' . $old . '" to "' . $new . '"');
+        }
+    }
 }
