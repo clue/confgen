@@ -12,38 +12,45 @@ class Confgen
 {
     private $twig;
     private $validator;
+    private $fs;
+
     private $schemaMeta;
     private $schemaDefinition;
 
-    public function __construct(Twig_Environment $twig, Validator $validator)
+    public function __construct(Twig_Environment $twig, Validator $validator, FileSystemLayer $fs = null)
     {
+        if ($fs === null) {
+            $fs = new FileSystemLayer();
+        }
+
         $this->twig = $twig;
         $this->validator = $validator;
+        $this->fs = $fs;
 
-        $this->schemaMeta = $this->fileData(__DIR__ . '/../res/schema-template.json', false);
-        $this->schemaDefinition = $this->fileData(__DIR__ . '/../res/schema-confgen.json', false);
+        $this->schemaMeta = $this->fs->fileData(__DIR__ . '/../res/schema-template.json', false);
+        $this->schemaDefinition = $this->fs->fileData(__DIR__ . '/../res/schema-confgen.json', false);
     }
 
     public function processTemplate($templateFile, $dataFile)
     {
         return $this->processTemplatesData(
             array($templateFile),
-            $dataFile === null ? null : $this->fileData($dataFile)
+            $dataFile === null ? null : $this->fs->fileData($dataFile)
         );
     }
 
     public function processDefinition($definitionFile, $dataFile)
     {
-        $definition = $this->fileData($definitionFile);
+        $definition = $this->fs->fileData($definitionFile);
 
         // validate schema definition
         $this->validate($definition, $this->schemaDefinition);
 
-        $templates = glob($definition['templates']);
+        $templates = $this->fs->glob($definition['templates']);
 
         return $this->processTemplatesData(
             $templates,
-            $dataFile === null ? null : $this->fileData($dataFile)
+            $dataFile === null ? null : $this->fs->fileData($dataFile)
         );
     }
 
@@ -72,11 +79,11 @@ class Confgen
             $meta['chmod'] = isset($meta['chmod']) ? octdec($meta['chmod']) : null;
 
             // target file name can either be given or defaults to template name without ".twig" extension
-            $target = isset($meta['target']) ? $meta['target'] : basename($template, '.twig');
+            $target = isset($meta['target']) ? $meta['target'] : $this->fs->basename($template, '.twig');
 
             // write resulting configuration to target path and apply
-            if (!$this->fileContains($target, $contents)) {
-                $this->fileReplace($target, $contents, $meta['chmod']);
+            if (!$this->fs->fileContains($target, $contents)) {
+                $this->fs->fileReplace($target, $contents, $meta['chmod']);
 
                 // template has a command definition to reload this file
                 if (isset($meta['reload'])) {
@@ -98,79 +105,9 @@ class Confgen
 
     private function extractFrontMatter($file)
     {
-        $contents = $this->fileContents($file);
+        $contents = $this->fs->fileContents($file);
 
         return FrontMatter::parse($contents);
-    }
-
-    private function fileData($path, $assoc = true)
-    {
-        $data = json_decode($this->fileContents($path), $assoc);
-        if (json_last_error() !== JSON_ERROR_NONE) {
-            throw new \RuntimeException('File "' . $path . '" contains invalid JSON', 65 /* EX_DATAERR */);
-        }
-        return $data;
-    }
-
-    private function fileContents($file)
-    {
-        $ret = @file_get_contents($file);
-
-        if ($ret === false) {
-            throw new \RuntimeException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */);
-        }
-
-        return $ret;
-    }
-
-    private function fileContains($file, $contents)
-    {
-        // empty contents means file is deleted
-        if ($contents === '' && !file_exists($file)) {
-            return true;
-        }
-
-        return (is_readable($file) && md5_file($file) === md5($contents));
-    }
-
-    private function fileReplace($file, $contents, $chmod)
-    {
-        if ($contents === '') {
-            if (file_exists($file)) {
-                $ret = unlink($file);
-                if ($ret === false) {
-                    throw new \RuntimeException('Unable to delete config "' . $file . '"');
-                }
-            }
-            return;
-        }
-
-        $temp = $file . '~';
-
-        // first write contents to temporary file
-        $ret = @file_put_contents($temp, $contents);
-        if ($ret === false) {
-            throw new \RuntimeException('Unable to write temp file "' . $temp . '"');
-        }
-
-        // apply file mode (chmod) if given
-        if ($chmod !== null) {
-            $ret = @chmod($temp, $chmod);
-            if ($ret === false) {
-                // explicitly remove temp file, but ignore its return code
-                unlink($temp);
-
-                throw new \RuntimeException('Unable to set file chmod for file "' . $temp . '"');
-            }
-        }
-
-        $ret = rename($temp, $file);
-        if ($ret === false) {
-            // explicitly remove temp file, but ignore its return code
-            unlink($temp);
-
-            throw new \RuntimeException('Unable to replace config "' . $file . '" with "' . $temp . '"');
-        }
     }
 
     private function execute($command)
