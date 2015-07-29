@@ -70,7 +70,7 @@ class Confgen
             ));
 
             // chmod is either unset or convert decimal to octal notation
-            $meta['chmod'] = isset($meta['chmod']) ? decoct($meta['chmod']) : null;
+            $meta['chmod'] = isset($meta['chmod']) ? octdec($meta['chmod']) : null;
 
             // target file name can either be given or defaults to template name without ".twig" extension
             $target = isset($meta['target']) ? $meta['target'] : basename($template, '.twig');
@@ -156,7 +156,7 @@ class Confgen
 
         // apply file mode (chmod) if given
         if ($chmod !== null) {
-            $ret = chmod($file, $chmod);
+            $ret = @chmod($temp, $chmod);
             if ($ret === false) {
                 // explicitly remove temp file, but ignore its return code
                 unlink($temp);

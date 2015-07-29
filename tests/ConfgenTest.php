@@ -192,4 +192,16 @@ class ConfgenTest extends TestCase
         $this->assertFileExists('filter');
         unlink('filter');
     }
+
+    public function test13Chmod()
+    {
+        chdir(__DIR__ . '/fixtures/13-chmod');
+
+        $this->confgen->processTemplate('template.twig', null);
+
+        // output file successfully generated with correct permissions
+        $this->assertFileEquals('output.expected', 'output');
+        $this->assertEquals(0777, fileperms('output') & 0777);
+        unlink('output');
+    }
 }
