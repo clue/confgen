@@ -47,7 +47,8 @@ class Confgen
         // validate schema definition
         $this->validate($definition, $this->schemaDefinition);
 
-        $templates = $this->fs->glob($definition['templates']);
+        // find all templates, relative to folder of definition file
+        $templates = $this->fs->glob(dirname($definitionFile) . '/' . $definition['templates']);
 
         return $this->processTemplatesData(
             $templates,

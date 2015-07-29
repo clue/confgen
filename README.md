@@ -118,7 +118,8 @@ static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
 
 Documented variables:
 
-* `target` target path to write the resulting file to
+* `target` target path to write the resulting file to.
+  Can be an abolute or relative path that will be resolved relative to the directory confgen is called in (i.e. not relative to this template file).
 * `chmod` file permissions (decimal) for the target file
 * `reload` command to execute after writing the target file
 * `description` human readable description
@@ -149,6 +150,11 @@ In its most simple form, a JSON configuration structure looks like this:
     "templates": "example/*.twig"
 }
 ```
+
+Documented variables:
+
+* `templates`
+  Can be an absolute or relative path that will be resolved relative to this definition (i.e. not necessarily the $PWD)
 
 See [configuration schema](res/schema-confgen.json) for more details.
 
