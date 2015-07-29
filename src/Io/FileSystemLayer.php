@@ -28,7 +28,7 @@ class FileSystemLayer
         $ret = @file_get_contents($file);
 
         if ($ret === false) {
-            throw new FileSystemException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */);
+            throw new FileSystemException('Unable to read file "' . $file . '"', 66 /* EX_NOINPUT */, new FileSystemException());
         }
 
         return $ret;
@@ -62,7 +62,7 @@ class FileSystemLayer
         // first write contents to temporary file
         $ret = @file_put_contents($temp, $contents);
         if ($ret === false) {
-            throw new FileSystemException('Unable to write temp file "' . $temp . '"');
+            throw new FileSystemException('Unable to write temp file "' . $temp . '"', 0, new FileSystemException());
         }
 
         try {
@@ -90,9 +90,9 @@ class FileSystemLayer
 
     public function unlink($file)
     {
-        $ret = unlink($file);
+        $ret = @unlink($file);
         if ($ret === false) {
-            throw new FileSystemException('Unable to delete "' . $file . '"');
+            throw new FileSystemException('Unable to delete "' . $file . '"', 0, new FileSystemException());
         }
     }
 
@@ -100,15 +100,15 @@ class FileSystemLayer
     {
         $ret = @chmod($file, $chmod);
         if ($ret === false) {
-            throw new FileSystemException('Unable to set file chmod for file "' . $file . '"');
+            throw new FileSystemException('Unable to set file chmod for file "' . $file . '"', 0, new FileSystemException());
         }
     }
 
     public function rename($old, $new)
     {
-        $ret = rename($old, $new);
+        $ret = @rename($old, $new);
         if ($ret === false) {
-            throw new FileSystemException('Unable to rename "' . $old . '" to "' . $new . '"');
+            throw new FileSystemException('Unable to rename "' . $old . '" to "' . $new . '"', 0, new FileSystemException());
         }
     }
 }
