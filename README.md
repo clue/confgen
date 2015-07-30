@@ -2,7 +2,25 @@
 
 Configuration file generator (confgen) –
 an easy way to take a *Twig template* and an arbitrary input data structure to
-generate structured (configuration) files on the fly. 
+generate structured (configuration) files on the fly.
+
+**Table of contents**
+
+* [Input data](#input-data)
+* [Templates](#templates)
+  * [Meta variables](#meta-variables)
+  * [Template contents](#template-contents)
+* [Configuration](#configuration)
+* [Bin Usage](#bin-usage)
+* [Lib Usage](#lib-usage)
+  * [Factory](#factory)
+    * [Twig_Environment](#twig_environment)
+    * [createConfgen()](#createconfgen)
+  * [Confgen](#confgen)
+    * [processTemplate()](#processtemplate)
+    * [processDefinition()](#processdefinition)
+* [Install](#install)
+* [License](#license)
 
 ## Input data
 
