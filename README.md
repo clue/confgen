@@ -8,8 +8,7 @@ generate structured (configuration) files on the fly.
 
 * [Input data](#input-data)
 * [Templates](#templates)
-  * [Meta variables](#meta-variables)
-  * [Template contents](#template-contents)
+* [Meta variables](#meta-variables)
 * [Configuration](#configuration)
 * [Bin Usage](#bin-usage)
 * [Lib Usage](#lib-usage)
@@ -74,12 +73,14 @@ For the following examples, this document assumes the following
 
 ## Templates
 
-Each (configuration) template file is broken into two parts:
+Each (configuration) template file is essentially a plaintext
+(output) configuration file with some placeholders.
 
-* The optional, leading YAML front matter (or *meta-data* variables)
-* And the actual Twig template contents
+The template file uses the *Twig template language* and can hence
+take full advantage of its variable substitution and advanced
+template control logic.
 
-In its most simple form, a template without the optional YAML front matter would
+In its most simple form, an arbitrary template would
 look something like this:
 
 ```
@@ -90,7 +91,32 @@ auto {{ interface.name }}
 {% endfor %}
 ```
 
-If you also want to include *meta-data* variables, then
+The input variables will be accessible under the `data` key.
+
+You can generate the output (configuration) file by [invoking confgen](#bin-usage) like this:
+
+```bash
+$ confgen -t template.twig -d data.json
+```
+
+In this example, it will write the resulting file to the template file name without extension (i.e. `template`).
+
+With the above example template and input data,
+the resulting output (configuration) file will look something like this:
+
+```
+timeout = 120
+auto eth0
+    address 192.168.1.1
+```
+
+## Meta variables
+
+Optionally, you can prefix the template file contents with the meta-data in the form of a YAML front matter.
+This syntax is quite simple and is pretty common for template processors and
+static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
+
+This means that if you want to include *meta-data* variables, then
 each section starts with a three-hyphen divider (`---`), so that a full file would
 look something like this:
 
@@ -107,33 +133,6 @@ auto {{ interface.name }}
 {% endfor %}
 ```
 
-The individual sections are described in more detail in the following sections.
-
-You can generate the output (configuration) file by [invoking confgen](#bin-usage) like this:
-
-```bash
-$ confgen -t template.twig -d data.json
-```
-
-If the [template meta-data](#meta-variables) contains a `target` key,
-it will write the resulting file to this location.
-Otherwise it will write to the template file name without extension (i.e. `template`).
-
-With the above example template and input data,
-the resulting output (configuration) file will look something like this:
-
-```
-timeout = 120
-auto eth0
-    address 192.168.1.1
-```
-
-### Meta variables
-
-The template files can optionally start with the meta-data in the form of a YAML front matter.
-This syntax is quite simple and is pretty common for template processors and
-static site generators such as [Jekyll](http://jekyllrb.com/docs/frontmatter/).
-
 Documented variables:
 
 * `target` target path to write the resulting file to.
@@ -146,15 +145,22 @@ You can also pass arbitrary custom meta-data.
 See [meta-data schema](res/schema-template.json) for more details.
 
 The meta variables will be accessible under the `meta` key in the Twig template.
-
-### Template contents
-
-Can contain any *Twig template*.
-
-The input variables will be accessible under the `data` key.
-
-The meta variables will be accessible under the `meta` key.
 If no *meta-data* variables are present, then this key defaults to an empty array.
+
+You can generate the output (configuration) file by [invoking confgen](#bin-usage) like this:
+
+```bash
+$ confgen -t template.twig -d data.json
+```
+
+If the [template meta-data](#meta-variables) contains a `target` key,
+it will write the resulting file to this location.
+
+In the above example, this means the following actions will be performed:
+
+* Write output (configuration) file to `/etc/network/interfaces`
+* Set file permissions to `0644`
+* Execute the reload script `/etc/init.d/network restart`
 
 ## Configuration
 
