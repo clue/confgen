@@ -65,4 +65,25 @@ class BinTest extends TestCase
         $this->assertContains('Error:', $line);
         $this->assertContains('Unable to read', $line);
     }
+
+    public function test17SkipsCommandExecution()
+    {
+        chdir(__DIR__ . '/fixtures/17-skip-command-execution');
+
+        passthru(escapeshellarg(__DIR__ . '/../bin/confgen') . ' -t template.twig --no-scripts 2>&1', $code);
+        unlink('dummy');
+
+        $this->assertFileNotExists('ShouldNotExist');
+    }
+
+    public function test17NoSkipOfReloadCommand()
+    {
+        chdir(__DIR__ . '/fixtures/17-skip-command-execution');
+
+        // Crosscheck to test 17 without 'skip'
+        passthru(escapeshellarg(__DIR__ . '/../bin/confgen') . ' -t template.twig 2>&1', $code);
+
+        $this->assertFileExists('ShouldNotExist');
+        unlink('ShouldNotExist');
+    }
 }

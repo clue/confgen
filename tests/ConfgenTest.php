@@ -1,7 +1,7 @@
 <?php
 
 use Clue\Confgen\Factory;
-use Clue\Confgen\Confgen;
+use Clue\Confgen\Executor\NullExecutor;
 
 class ConfgenTest extends TestCase
 {
@@ -232,5 +232,19 @@ class ConfgenTest extends TestCase
         $this->expectOutputString('');
         $this->confgen->processTemplate('template.twig', 'data.json');
         unlink('output');
+    }
+
+    public function test17SkipReloadCommandExecution()
+    {
+        chdir(__DIR__ . '/fixtures/17-skip-command-execution');
+
+        $factory = new Factory(null, null, null, new NullExecutor());
+        $confgen = $factory->createConfgen();
+
+        $confgen->processTemplate('template.twig', 'data.json');
+        unlink('dummy');
+
+        // reload command is skipped due to no-scripts flag
+        $this->assertFileNotExists('ShouldNotExist');
     }
 }
