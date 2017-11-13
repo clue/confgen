@@ -19,6 +19,7 @@ generate structured (configuration) files on the fly.
     * [processTemplate()](#processtemplate)
     * [processDefinition()](#processdefinition)
 * [Install](#install)
+* [Tests](#tests)
 * [License](#license)
 
 ## Input data
@@ -200,7 +201,7 @@ If you want to see the usage help,
 simply invoke its help by calling like this:
 
 ```bash
-$ confgen 
+$ confgen
 ```
 
 If you have installed this via `$ composer require`, then you may have to
@@ -269,7 +270,7 @@ generate a output (configuration) file from the given [template file](#templates
 $confgen->processTemplate('template.twig', 'data.json');
 ```
 
-See also [templates section](#templates) above for more details on the 
+See also [templates section](#templates) above for more details on the
 The [input data](#input-data).
 
 #### processDefinition
@@ -293,6 +294,21 @@ The recommended way to install this library is [through composer](http://getcomp
         "clue/confgen": "~0.5.0"
     }
 }
+```
+
+## Tests
+
+To run the test suite, you first need to clone this repo and then install all
+dependencies [through Composer](http://getcomposer.org):
+
+```bash
+$ composer install
+```
+
+To run the test suite, go to the project root and run:
+
+```bash
+$ php vendor/bin/phpunit
 ```
 
 ## License
