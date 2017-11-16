@@ -4,29 +4,36 @@ namespace Clue\Confgen;
 
 use Twig_Environment;
 use Twig_Loader_Array;
-use RuntimeException;
 use KzykHys\FrontMatter\FrontMatter;
 use JsonSchema\Validator;
 use Clue\Confgen\Io\FileSystemLayer;
+use Clue\Confgen\Executor\ExecutorInterface;
+use Clue\Confgen\Executor\StdoutSuppressingSystemExecutor;
 
 class Confgen
 {
     private $twig;
     private $validator;
     private $fs;
+    private $executor;
 
     private $schemaMeta;
     private $schemaDefinition;
 
-    public function __construct(Twig_Environment $twig, Validator $validator, FileSystemLayer $fs = null)
+    public function __construct(Twig_Environment $twig, Validator $validator, FileSystemLayer $fs = null, ExecutorInterface $executor = null)
     {
         if ($fs === null) {
             $fs = new FileSystemLayer();
         }
 
+        if ($executor === null) {
+            $executor = new StdoutSuppressingSystemExecutor();
+        }
+
         $this->twig = $twig;
         $this->validator = $validator;
         $this->fs = $fs;
+        $this->executor = $executor;
 
         $this->schemaMeta = $this->fs->fileData(__DIR__ . '/../res/schema-template.json', false);
         $this->schemaDefinition = $this->fs->fileData(__DIR__ . '/../res/schema-confgen.json', false);
@@ -96,7 +103,7 @@ class Confgen
 
         // let's reload all the files after (successfully) writing all of them
         foreach ($commands as $command) {
-            $this->execute($command);
+            $this->executor->executeCommand($command);
         }
     }
 
@@ -110,14 +117,6 @@ class Confgen
         $contents = $this->fs->fileContents($file);
 
         return FrontMatter::parse($contents);
-    }
-
-    private function execute($command)
-    {
-        exec($command, $ret, $code);
-        if ($code !== 0) {
-            throw new \RuntimeException('Unable to execute "' . $command . '"');
-        }
     }
 
     private function validate($data, $schema)

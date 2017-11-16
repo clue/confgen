@@ -215,4 +215,22 @@ class ConfgenTest extends TestCase
         $this->assertEquals(0777, fileperms('output') & 0777);
         unlink('output');
     }
+
+    public function test14IgnoreOutputToStdout()
+    {
+        chdir(__DIR__ . '/fixtures/14-stdout-ignored');
+
+        $this->expectOutputString('');
+        $this->confgen->processTemplate('template.twig', 'data.json');
+        unlink('output');
+    }
+
+    public function test15NoStdoutOutputEvenIfStderr()
+    {
+        chdir(__DIR__ . '/fixtures/15-stderr-output');
+
+        $this->expectOutputString('');
+        $this->confgen->processTemplate('template.twig', 'data.json');
+        unlink('output');
+    }
 }
