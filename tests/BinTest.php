@@ -35,6 +35,16 @@ class BinTest extends TestCase
         unlink('example.conf');
     }
 
+    public function test16StderrContainsStderrFromReloadCommand()
+    {
+        chdir(__DIR__ . '/fixtures/16-reload-stderr');
+
+        passthru(escapeshellarg(__DIR__ . '/../bin/confgen') . ' -t example.conf.twig 2>&1', $code);
+
+        $this->expectOutputString("done\n");
+        unlink("example.conf");
+    }
+
     public function testStderrContainsErrorWhenNoTemplateOrConfigurationArgumentsGiven()
     {
         chdir(__DIR__ . '/../bin');

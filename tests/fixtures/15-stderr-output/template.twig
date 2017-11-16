@@ -1,0 +1,11 @@
+---
+target: output
+reload: echo done >&2
+---
+# just a sample
+timeout = {{ data.timeout }};
+
+[all]
+{% for value in data.values %}
+add {{ value }};
+{% endfor %}
