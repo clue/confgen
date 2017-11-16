@@ -1,8 +1,8 @@
 # clue/confgen [![Build Status](https://travis-ci.org/clue/php-confgen.svg?branch=master)](https://travis-ci.org/clue/php-confgen)
 
 Configuration file generator (confgen) –
-an easy way to take a *Twig template* and an arbitrary input data structure to
-generate structured (configuration) files on the fly.
+an easy way to generate structured (configuration) files on the fly by
+processing a *Twig template* and an arbitrary input data structure.
 
 **Table of contents**
 
@@ -316,7 +316,7 @@ The recommended way to install this library is [through Composer](https://getcom
 [New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
 ```bash
-$ composer require clue/confgen:^0.5
+$ composer require clue/confgen:^0.6
 ```
 
 This project aims to run on any platform and thus does not require any PHP

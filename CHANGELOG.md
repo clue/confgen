@@ -1,5 +1,22 @@
 # Changelog
 
+## 0.6.0 (2017-11-16)
+
+*   Feature: Add new `--no-scripts` argument to skip reload scripts/commands
+    (#26 and #29 by @thklein)
+
+    ```bash
+    $ confgen --no-scripts -t wifi.conf.twig -d data.json
+    ```
+
+*   First class support for legacy PHP 5.3 through PHP 7.1 and HHVM and
+    documentation for installing and creating `confgen.phar`
+    (#31 and #32 by @clue)
+
+*   Improve test suite by locking Travis distro so new defaults will not break the build and
+    add PHPUnit as dev dependency and support PHPUnit 5 and PHPUnit 6.
+    (#27 by @thklein and #28 by @gabriel-caruso)
+
 ## 0.5.0 (2015-07-29)
 
 *   BC break / Feature: Path to "templates" is relative to definition – other paths to PWD
