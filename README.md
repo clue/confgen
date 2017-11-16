@@ -293,15 +293,17 @@ See also [configuration section](#configuration) above for more details.
 
 ## Install
 
-The recommended way to install this library is [through composer](http://getcomposer.org). [New to composer?](http://getcomposer.org/doc/00-intro.md)
+The recommended way to install this library is [through Composer](https://getcomposer.org).
+[New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
-```JSON
-{
-    "require": {
-        "clue/confgen": "~0.5.0"
-    }
-}
+```bash
+$ composer require clue/confgen:^0.5
 ```
+
+This project aims to run on any platform and thus does not require any PHP
+extensions and supports running on legacy PHP 5.3 through current PHP 7+ and
+HHVM.
+It's *highly recommended to use PHP 7+* for this project.
 
 ## Tests
 
