@@ -163,6 +163,13 @@ In the above example, this means the following actions will be performed:
 * Set file permissions to `0644`
 * Execute the reload script `/etc/init.d/network restart`
 
+Sometimes it is useful to skip the execution of the scripts/commands defined by the meta variable `reload`.
+To do so you can use the optional parameter `--no-scripts` like this:
+
+```bash
+$ confgen --no-scripts -t template.twig -d data.json
+```
+
 ## Configuration
 
 You can either parse/process individual template files or use a configuration
@@ -186,7 +193,7 @@ See [configuration schema](res/schema-confgen.json) for more details.
 You can generate the output (configuration) files by [invoking confgen](#bin-usage) like this:
 
 ```bash
-$ confgen -c confgen.json -d data.json
+$ confgen [--no-scripts] -c confgen.json -d data.json
 ```
 
 This works similar to invoking with individual [template files](#templates).

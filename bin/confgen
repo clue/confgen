@@ -3,8 +3,10 @@
 require __DIR__ . '/../vendor/autoload.php';
 
 use Clue\Confgen\Factory;
+use Clue\Confgen\Executor\NullExecutor;
 
-$args = getopt('t:c:d:h');
+$args = getopt('t:c:d:h', array('no-scripts'));
+$noScripts = array_key_exists('no-scripts', $args);
 
 if (isset($args['h']) || !isset($argv[1])) {
     showUsage();
@@ -18,7 +20,13 @@ if ((!isset($args['t']) && !isset($args['c'])) || isset($args['t'], $argcs['c'])
 // JSON input data is optional and defaults to null
 $dataFile = isset($args['d']) ? $args['d'] : null;
 
-$factory = new Factory();
+$executor = null;
+if ($noScripts) {
+    // We want to skip execution of scripts/commands - use NullExecutor
+    $executor = new NullExecutor();
+}
+
+$factory = new Factory(null, null, null, $executor);
 $confgen = $factory->createConfgen();
 
 try {
@@ -43,14 +51,15 @@ function showUsage()
 {
     echo <<<EOT
 Configuration file generator (confgen)
-Usage: confgen -t template.twig [-d data.json]
-   Or: confgen -c confgen.json [-d data.json]
+Usage: confgen -t template.twig [-d data.json] [--no-scripts]
+   Or: confgen -c confgen.json [-d data.json] [--no-scripts]
 
 Options:
-    -t    Path to Twig template file
-    -c    Path to confgen JSON configuration definition
-    -d    Path to optional JSON input data file
-    -h    Show this help
+    -t            Path to Twig template file
+    -c            Path to confgen JSON configuration definition
+    -d            Path to optional JSON input data file
+    --no-scripts  Skips the execution of the scripts/commands defined by the meta variable "reload"
+    -h            Show this help
 
 EOT;
     exit(64 /* EX_USAGE */);
