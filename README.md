@@ -293,6 +293,25 @@ See also [configuration section](#configuration) above for more details.
 
 ## Install
 
+You can simply download a pre-compiled and ready-to-use version as a Phar
+to any directory.
+Simply download the latest `confgen.phar` file from our
+[releases page](https://github.com/clue/confgen/releases):
+
+[Latest release](https://github.com/clue/confgen/releases/latest)
+
+That's it already. You can now verify everything works by running this:
+
+```bash
+$ cd ~/Downloads
+$ php confgen.phar -h
+
+$ chmod +x confgen.phar
+$ sudo mv confgen.phar /usr/local/bin/confgen
+```
+
+Alternatively, you can also use this project as a library to integrate this into
+an existing application.
 The recommended way to install this library is [through Composer](https://getcomposer.org).
 [New to Composer?](https://getcomposer.org/doc/00-intro.md)
 
@@ -304,6 +323,9 @@ This project aims to run on any platform and thus does not require any PHP
 extensions and supports running on legacy PHP 5.3 through current PHP 7+ and
 HHVM.
 It's *highly recommended to use PHP 7+* for this project.
+
+> If you want to create the above `confgen.phar` locally, you have to clone
+  this repository and run `composer build`.
 
 ## Tests
 

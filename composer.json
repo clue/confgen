@@ -27,5 +27,8 @@
         "platform": {
             "php": "5.3.7"
         }
+    },
+    "scripts": {
+        "build": "rm -f confgen*.phar && composer install --no-dev && phar-composer build . && composer install"
     }
 }
