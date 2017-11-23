@@ -86,4 +86,14 @@ class BinTest extends TestCase
         $this->assertFileExists('ShouldNotExist');
         unlink('ShouldNotExist');
     }
+
+    public function test18ErrorIfCommandExecutionFailed()
+    {
+        chdir(__DIR__ . '/fixtures/18-command-execution-failed');
+
+        exec(escapeshellarg(__DIR__ . '/../bin/confgen') . ' -t template.twig 2>&1', $out, $code);
+
+        $this->assertEquals(1, $code);
+        unlink('output');
+    }
 }
