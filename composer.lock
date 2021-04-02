@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "justinrainbow/json-schema",
-            "version": "v1.6.0",
+            "version": ">=1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/justinrainbow/json-schema.git",
