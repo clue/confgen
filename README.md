@@ -1,4 +1,6 @@
-# clue/confgen [![Build Status](https://travis-ci.org/clue/php-confgen.svg?branch=master)](https://travis-ci.org/clue/php-confgen)
+# clue/confgen
+
+[![Build Status](https://travis-ci.org/clue/confgen.svg?branch=master)](https://travis-ci.org/clue/confgen)
 
 Configuration file generator (confgen) –
 an easy way to generate structured (configuration) files on the fly by

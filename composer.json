@@ -2,7 +2,7 @@
     "name": "clue/confgen",
     "description": "Configuration file generator (confgen) – an easy way to generate structured (configuration) files on the fly by processing a Twig template and an arbitrary input data structure.",
     "keywords": ["confgen", "Configuration generator", "Twig template", "YAML front matter"],
-    "homepage": "https://github.com/clue/php-confgen",
+    "homepage": "https://github.com/clue/confgen",
     "license": "MIT",
     "authors": [
         {
