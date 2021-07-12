@@ -1,6 +1,7 @@
 # clue/confgen
 
 [![Build Status](https://travis-ci.org/clue/confgen.svg?branch=master)](https://travis-ci.org/clue/confgen)
+[![installs on Packagist](https://img.shields.io/packagist/dt/clue/confgen?color=blue&label=install%20on%20Packagist)](https://packagist.org/packages/clue/confgen)
 
 Configuration file generator (confgen) –
 an easy way to generate structured (configuration) files on the fly by
