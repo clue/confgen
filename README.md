@@ -323,8 +323,7 @@ $ composer require clue/confgen:^0.6
 ```
 
 This project aims to run on any platform and thus does not require any PHP
-extensions and supports running on legacy PHP 5.3 through current PHP 7+ and
-HHVM.
+extensions and supports running on legacy PHP 5.3 through current PHP 7+.
 It's *highly recommended to use PHP 7+* for this project.
 
 > If you want to create the above `confgen.phar` locally, you have to clone
