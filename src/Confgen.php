@@ -103,7 +103,10 @@ class Confgen
 
         // let's reload all the files after (successfully) writing all of them
         foreach ($commands as $command) {
-            $this->executor->executeCommand($command);
+            $code = $this->executor->executeCommand($command);
+            if ($code !== 0) {
+                throw new \RuntimeException('Unable to execute "' . $command . '"', $code);
+            }
         }
     }
 

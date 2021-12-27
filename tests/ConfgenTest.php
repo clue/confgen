@@ -247,4 +247,19 @@ class ConfgenTest extends TestCase
         // reload command is skipped due to no-scripts flag
         $this->assertFileNotExists('ShouldNotExist');
     }
+
+    public function test18CommandExecutionFailed()
+    {
+        chdir(__DIR__ . '/fixtures/18-command-execution-failed');
+
+        // Must catch it manually due to fact that unlink is not executed when testing for exception
+        try {
+            $this->confgen->processTemplate('template.twig', null);
+        } catch (RuntimeException $e) {
+            $this->assertTrue(true);
+            unlink('output');
+            return;
+        }
+        $this->fail('RuntimeException not thrown');
+    }
 }

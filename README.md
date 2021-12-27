@@ -280,6 +280,9 @@ generate a output (configuration) file from the given [template file](#templates
 $confgen->processTemplate('template.twig', 'data.json');
 ```
 
+The `processTemplate($templateFile, $dataFile)` method throws a `RuntimeException` when a `reload` command fail.
+See also [Meta variables](#meta-variables) section for more details on `reload`.
+
 See also [templates section](#templates) above for more details on the
 The [input data](#input-data).
 
@@ -291,6 +294,9 @@ generate any number of output (configuration) files from the given [configuratio
 ```php
 $confgen->processDefinition('confgen.json', 'data.json');
 ```
+
+The `processDefinition($definitionFile, $dataFile)` method throws a `RuntimeException` when a `reload` command fail.
+See also [Meta variables](#meta-variables) section for more details on `reload`.
 
 See also [configuration section](#configuration) above for more details.
 
